@@ -14,6 +14,9 @@ import { AccommodationsModule } from './accommodations/accommodations.module';
 import { AccommodationTypesModule } from './accommodation_types/accommodation_types.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { BookingStatusModule } from './booking_status/booking_status.module';
+import { Customers } from './customers/entities/customer.entity';
+import { Company } from './companies/entities/company.entity';
+import { Booking } from './bookings/entities/booking.entity';
 
 @Module({
   imports: [
@@ -22,8 +25,8 @@ import { BookingStatusModule } from './booking_status/booking_status.module';
       host: 'localhost',
       username: 'postgres',
       password: 'Umang#2005',
-      database: 'accomadation',
-      entities: [Users, Permission, Role],
+      database: 'accommodation',
+      entities: [Users, Permission, Role, Customers, Company, Booking],
       autoLoadEntities: true,
       synchronize: true
     }),
