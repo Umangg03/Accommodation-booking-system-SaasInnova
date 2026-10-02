@@ -2,17 +2,20 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Accommodation } from "../../accommodations/entities/accommodation.entity";
 
 @Entity()
-export class AccommodationType {
+export class Location {
 
     @PrimaryGeneratedColumn()
     id: number
 
     @Column()
-    name: string;
-
+    area: string;
+    
     @Column()
-    description: string;
+    city: string;
+    
+    @Column()
+    country: string;
 
-    @OneToMany(()=> Accommodation,(accommodation)=>accommodation.accommodotion_type)
+    @OneToMany(()=> Accommodation ,(accommodation)=>accommodation.location)
     accommodation: Accommodation[];
 }

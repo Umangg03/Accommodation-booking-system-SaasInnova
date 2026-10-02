@@ -1,5 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import { Customers } from "../../customers/entities/customer.entity";
+import { BookingStatus } from "../../booking_status/entities/booking_status.entity";
+import { Accommodation } from "../../accommodations/entities/accommodation.entity";
 
 @Entity()
 export class Booking {
@@ -13,9 +15,12 @@ export class Booking {
     @Column()
     cheek_out: Date;
 
-    @Column()
-    phone: string;
-
     @ManyToOne(()=> Customers ,(customer)=> customer.booking)
     customer: Customers
+
+    @ManyToOne(()=>BookingStatus,(status)=>status.booking)
+    status: BookingStatus;
+
+    @ManyToOne(()=>Accommodation ,(accommodation)=>accommodation.booking)
+    accommodation: Accommodation;
 }
