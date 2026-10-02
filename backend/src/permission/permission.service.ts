@@ -1,26 +1,57 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Permission } from './entities/permission.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PermissionService {
-  create(createPermissionDto: CreatePermissionDto) {
-    return 'This action adds a new permission';
+  constructor(@InjectRepository(Permission)
+    private permissionRepository : Repository<Permission>
+){}
+
+ 
+async create(createPermissionDto: CreatePermissionDto) {
+    const {roleId,...permissionData} = createPermissionDto  
+    const permission =  this.permissionRepository.create(
+      {
+        ...permissionData,
+        role : roleId ? {id:roleId}:undefined
+      }
+    )
+    return await this.permissionRepository.save(permission);
   }
 
-  findAll() {
-    return `This action returns all permission`;
+  async findAll() {
+    return await this.permissionRepository.find({
+      order:{
+        id: 'ASC'
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} permission`;
+  async findOne(id: number) {
+    const permission = await this.permissionRepository.findOne({where:{id}})
+    if(!permission){
+      throw new NotFoundException(`Permission With this ID ${id} not found`)
+    }
+    return permission;
   }
 
-  update(id: number, updatePermissionDto: UpdatePermissionDto) {
-    return `This action updates a #${id} permission`;
+  async update(id: number, updatePermissionDto: UpdatePermissionDto) {
+    const permission = await this.findOne(id)
+    const {roleId,...permissionData} = updatePermissionDto
+
+    Object.assign(permission,permissionData)
+    if(roleId !== undefined){
+      permission.role = roleId ? ({id: roleId}as any) : null;
+    }
+    return await this.permissionRepository.save(permission);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} permission`;
+  async remove(id: number) {
+    const permission = await this.findOne(id)
+    return await this.permissionRepository.remove(permission);
   }
 }

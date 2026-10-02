@@ -24,3 +24,4 @@ export class Booking {
     @ManyToOne(()=>Accommodation ,(accommodation)=>accommodation.booking)
     accommodation: Accommodation;
 }
+    

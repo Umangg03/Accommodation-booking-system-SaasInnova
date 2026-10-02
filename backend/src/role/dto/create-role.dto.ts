@@ -1,1 +1,10 @@
-export class CreateRoleDto {}
+import { IsString, IsNotEmpty, IsNumber, IsEmail } from "class-validator";
+export class CreateRoleDto {
+
+
+    @IsString()@IsNotEmpty()
+    role: string
+
+    @IsString()@IsNotEmpty()
+    description: string
+}
